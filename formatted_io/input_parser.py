@@ -66,7 +66,7 @@ class InputParser(object):
 
 		if (len(headings) != self.num_pixels):
 			raise TypeError(
-				"Training set expects have %d columns" % (self.num_pixels)
+				"Training set expects to have %d columns" % (self.num_pixels)
 			)
 
 
