@@ -41,13 +41,6 @@ def foo():
 		classifier.predict(testing_set_pixels)
 	)
 
-def dataset_inspection():
-	digits = datasets.load_digits()
-	print(digits.data)
-	print(digits.data.shape)
-	print(digits.target)
-	print(digits.target.shape)
+	classifier.plot_rbm_features()
 
 foo()
-
-dataset_inspection()
