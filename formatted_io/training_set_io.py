@@ -1,5 +1,5 @@
 from pandas import Series
-from numpy import uint8
+from numpy import uint8, float16, zeros
 from formatted_io import InputParser
 
 """Parses kaggle input training and test set data for processing
@@ -25,11 +25,16 @@ class TrainingSetIO(InputParser):
         Generates tuples of integer labels and arrays of pixel values
         """
 
-        pixels = []
-        numbers = []
+        num_rows = self._parse_file_data_size(file_path)
+
+        pixels = zeros((num_rows, self.num_columns - 1), float16)
+        numbers = zeros((num_rows, ), uint8)
+
+        row = 0
         for sample_data in super(TrainingSetIO, self).parse(file_path):
-            numbers.append(uint8(sample_data[0]))
-            pixels.append(uint8(sample_data[1:]))
+            numbers[row] = uint8(sample_data[0])
+            pixels[row] = uint8(sample_data[1:])
+            row += 1
 
         pixels = super(TrainingSetIO, self)._process_raw_pixel_values(pixels)
 

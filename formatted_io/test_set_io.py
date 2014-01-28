@@ -1,4 +1,4 @@
-from numpy import uint8
+from numpy import uint8, zeros
 from formatted_io import InputParser
 
 """Parses kaggle input test set data for processing
@@ -23,10 +23,14 @@ class TestSetIO(InputParser):
         Generates arrays of pixel values
         """
 
-        pixels = []
+        num_rows = self._parse_file_data_size(file_path)
 
+        pixels = zeros((num_rows, self.num_columns), uint8)
+
+        row = 0
         for sample_data in super(TestSetIO, self).parse(file_path):
-            pixels.append(uint8(sample_data))
+            pixels[row] = uint8(sample_data)
+            row += 1
 
         return super(TestSetIO, self)._process_raw_pixel_values(pixels)
 
