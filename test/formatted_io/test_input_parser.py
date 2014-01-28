@@ -1,5 +1,5 @@
 import unittest
-from formatted_io import InputParser
+from formatted_io import InputParser, TestSetIO, TrainingSetIO
 from pandas import Series, SparseDataFrame
 
 class TestRBMClassifier(unittest.TestCase):
@@ -14,8 +14,8 @@ class TestRBMClassifier(unittest.TestCase):
         """Tests that the training data is of the excepted format
         ([numbers], [pixels]) with the same number of numbers to pixels
         """
-        input_parser = InputParser()
-        training_numbers, training_pixels = input_parser.parse_train(
+        input_parser = TrainingSetIO()
+        training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
         
@@ -25,9 +25,9 @@ class TestRBMClassifier(unittest.TestCase):
         """Tests that the proper exception gets thrown if the wrong headings
         are encountered
         """
-        input_parser = InputParser()
+        input_parser = TrainingSetIO()
         with self.assertRaises(TypeError):
-            training_numbers, training_pixels = input_parser.parse_train(
+            training_numbers, training_pixels = input_parser.parse(
                 # Wrong path
                 self.MOCK_TESTING_DATA_PATH
             )
@@ -35,8 +35,8 @@ class TestRBMClassifier(unittest.TestCase):
     def test_training_pixels_sparse_format(self):
         """Tests that the training data is of the correct number array format
         """
-        input_parser = InputParser()
-        training_numbers, training_pixels = input_parser.parse_train(
+        input_parser = TrainingSetIO()
+        training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
         
@@ -46,8 +46,8 @@ class TestRBMClassifier(unittest.TestCase):
     def test_training_numbers_sparse_format(self):
         """Tests that the training data is of the correct number array format
         """
-        input_parser = InputParser()
-        training_numbers, training_pixels = input_parser.parse_train(
+        input_parser = TrainingSetIO()
+        training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
         
@@ -57,8 +57,8 @@ class TestRBMClassifier(unittest.TestCase):
         """Tests that the training data pixels have been normalised to 0-1
         scale
         """
-        input_parser = InputParser()
-        training_numbers, training_pixels = input_parser.parse_train(
+        input_parser = TrainingSetIO()
+        training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
 
@@ -69,8 +69,8 @@ class TestRBMClassifier(unittest.TestCase):
     def test_training_data_numbers_correct_range(self):
         """Tests that the training data numbers are in the range 0-9
         """
-        input_parser = InputParser()
-        training_numbers, training_pixels = input_parser.parse_train(
+        input_parser = TrainingSetIO()
+        training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
 
@@ -83,9 +83,9 @@ class TestRBMClassifier(unittest.TestCase):
         """Tests that the proper exception gets thrown if the wrong headings
         are encountered
         """
-        input_parser = InputParser()
+        input_parser = TestSetIO()
         with self.assertRaises(TypeError):
-            training_numbers, training_pixels = input_parser.parse_test(
+            training_numbers, training_pixels = input_parser.parse(
                 # Wrong path
                 self.MOCK_TRAINING_DATA_PATH
             )   
@@ -93,8 +93,8 @@ class TestRBMClassifier(unittest.TestCase):
     def test_testing_data_sparse_format(self):
         """Tests that the testing data is of the correct number array format
         """
-        input_parser = InputParser()
-        testing_pixels = input_parser.parse_test(self.MOCK_TESTING_DATA_PATH)
+        input_parser = TestSetIO()
+        testing_pixels = input_parser.parse(self.MOCK_TESTING_DATA_PATH)
         self.assertIsInstance(testing_pixels, SparseDataFrame)
 
 
@@ -102,8 +102,8 @@ class TestRBMClassifier(unittest.TestCase):
         """Tests that the testing data pixels have been normalised to the range
         0-1
         """
-        input_parser = InputParser()
-        testing_pixels = input_parser.parse_test(self.MOCK_TESTING_DATA_PATH)
+        input_parser = TestSetIO()
+        testing_pixels = input_parser.parse(self.MOCK_TESTING_DATA_PATH)
 
         testing_pixels.applymap(
             lambda x: self.assertGreaterEqual(x, 0) and self.assertLessEqual(x, 1)
