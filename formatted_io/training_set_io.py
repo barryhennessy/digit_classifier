@@ -39,7 +39,7 @@ class TrainingSetIO(InputParser):
         pixels = super(TrainingSetIO, self)._process_raw_pixel_values(pixels)
 
         # @TODO: Check performance of series. Here for consistency
-        return (Series(numbers), pixels)
+        return (numbers, pixels)
 
     def _check_headings(self, csv_reader):
         headings = csv_reader.next()

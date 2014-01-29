@@ -1,6 +1,6 @@
 import unittest
-from formatted_io import InputParser, TestSetIO, TrainingSetIO
-from pandas import Series, SparseDataFrame
+from formatted_io import TestSetIO, TrainingSetIO
+from numpy import ndarray, nditer
 
 class TestRBMClassifier(unittest.TestCase):
 
@@ -40,7 +40,7 @@ class TestRBMClassifier(unittest.TestCase):
             self.MOCK_TRAINING_DATA_PATH
         )
         
-        self.assertIsInstance(training_pixels, SparseDataFrame)
+        self.assertIsInstance(training_pixels, ndarray)
 
 
     def test_training_numbers_sparse_format(self):
@@ -51,7 +51,7 @@ class TestRBMClassifier(unittest.TestCase):
             self.MOCK_TRAINING_DATA_PATH
         )
         
-        self.assertIsInstance(training_numbers, Series)
+        self.assertIsInstance(training_numbers, ndarray)
 
     def test_training_data_pixel_normalising(self):
         """Tests that the training data pixels have been normalised to 0-1
@@ -62,9 +62,9 @@ class TestRBMClassifier(unittest.TestCase):
             self.MOCK_TRAINING_DATA_PATH
         )
 
-        training_pixels.applymap(
-            lambda x: self.assertGreaterEqual(x, 0) and self.assertLessEqual(x, 1)
-        )
+        for training_pixel in nditer(training_pixels):
+            self.assertGreaterEqual(training_pixel, 0)
+            self.assertLessEqual(training_pixel, 1)
 
     def test_training_data_numbers_correct_range(self):
         """Tests that the training data numbers are in the range 0-9
@@ -75,9 +75,8 @@ class TestRBMClassifier(unittest.TestCase):
         )
 
         number_range = range(0, 10, 1)
-        training_numbers.apply(
-            lambda x: self.assertIn(x, number_range)
-        )
+        for training_number in nditer(training_numbers):
+            self.assertIn(training_number, number_range)
      
     def test_testing_excepts_with_wrong_headings(self):
         """Tests that the proper exception gets thrown if the wrong headings
@@ -95,7 +94,7 @@ class TestRBMClassifier(unittest.TestCase):
         """
         input_parser = TestSetIO()
         testing_pixels = input_parser.parse(self.MOCK_TESTING_DATA_PATH)
-        self.assertIsInstance(testing_pixels, SparseDataFrame)
+        self.assertIsInstance(testing_pixels, ndarray)
 
 
     def test_testing_data_pixel_normalising(self):
@@ -105,9 +104,9 @@ class TestRBMClassifier(unittest.TestCase):
         input_parser = TestSetIO()
         testing_pixels = input_parser.parse(self.MOCK_TESTING_DATA_PATH)
 
-        testing_pixels.applymap(
-            lambda x: self.assertGreaterEqual(x, 0) and self.assertLessEqual(x, 1)
-        )
+        for training_pixel in nditer(testing_pixels):
+            self.assertGreaterEqual(training_pixel, 0)
+            self.assertLessEqual(training_pixel, 1)
 
 
 if __name__ == '__main__':
