@@ -35,6 +35,9 @@ class TestSetIO(InputParser):
         return super(TestSetIO, self)._process_raw_pixel_values(pixels)
 
     def _check_headings(self, csv_reader):
+        """Consumes the first row of the csv_reader and ensures the headings
+        are as required
+        """
         headings = csv_reader.next()
         super(TestSetIO, self)._check_heading_length(headings)
 

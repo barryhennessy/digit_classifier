@@ -39,10 +39,19 @@ class InputParser(object):
 
 
     def _process_raw_pixel_values(self, raw_pixels):
+        """Applies pre processing to the pixel values
+
+        Pixel values are expected to be in the range 0-255.
+
+        @TODO: raise an exception if the pixels are not in the correct range
+        """
         raw_pixels /= 255
         return raw_pixels
 
     def _check_heading_length(self, headings):
+        """Ensures that the headings are of the correct length as defined by
+        the concrete implementation of the input parser
+        """
         len_headings = len(headings)
         if (len_headings != self.num_columns):
             raise TypeError(

@@ -42,6 +42,9 @@ class TrainingSetIO(InputParser):
         return (numbers, pixels)
 
     def _check_headings(self, csv_reader):
+        """Consumes the first row of the csv_reader and ensures the headings
+        are long enough and have the label field as the first position
+        """
         headings = csv_reader.next()
 
         if (headings[0] != "label"):
