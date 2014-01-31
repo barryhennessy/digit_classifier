@@ -69,9 +69,9 @@ class RBMClassifier(object):
     def plot_rbm_features(self):
         rbm = self.classifier.named_steps["rbm"]
         plt.figure(figsize=(4.2, 4))
-        subplot_width = ceil(sqrt(self.num_components))
+        subplot_width = ceil(sqrt(rbm.n_components))
         for i, comp in enumerate(rbm.components_):
-            plt.subplot(10, 10, i + 1)
+            plt.subplot(subplot_width, subplot_width, i + 1)
 
             square_len = ceil(sqrt(comp.shape[0]))
             plt.imshow(comp.reshape((square_len, square_len)), cmap=plt.cm.gray_r,
