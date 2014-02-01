@@ -1,4 +1,3 @@
-from pandas import Series
 from numpy import uint8, float16, zeros
 from formatted_io import InputParser
 
