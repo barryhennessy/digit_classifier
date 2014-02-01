@@ -1,4 +1,5 @@
 from numpy import uint8, zeros
+from csv import DictWriter
 from formatted_io import InputParser
 
 """Parses kaggle input test set data for processing
@@ -33,6 +34,22 @@ class TestSetIO(InputParser):
             row += 1
 
         return super(TestSetIO, self)._process_raw_pixel_values(pixels)
+
+    def write(self, predicted_values, path):
+        """Writes the predicted values to the path specified
+        """
+        with open(path, "w") as output_file:
+            csv_output = DictWriter(output_file, {"ImageId", "Label"})
+            csv_output.writeheader()
+
+            line_count = 1
+            for value in predicted_values:
+                row = {
+                    "ImageId": line_count,
+                    "Label": int(value)
+                }
+                csv_output.writerow(row)
+                line_count += 1
 
     def _check_headings(self, csv_reader):
         """Consumes the first row of the csv_reader and ensures the headings
