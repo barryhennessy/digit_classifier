@@ -2,8 +2,7 @@ from sklearn import linear_model
 from sklearn.neural_network import BernoulliRBM
 from sklearn.grid_search import GridSearchCV
 from sklearn.pipeline import Pipeline
-import matplotlib.pyplot as plt
-from math import sqrt, ceil
+
 
 class RBMClassifier(object):
     """Classifies images as integer 0-9 and tests given input
@@ -66,19 +65,3 @@ class RBMClassifier(object):
         return self.classifier.predict(unclassified_image_pixels)
 
 
-    def plot_rbm_features(self):
-        rbm = self.classifier.named_steps["rbm"]
-        plt.figure(figsize=(4.2, 4))
-        subplot_width = ceil(sqrt(self.num_components))
-        for i, comp in enumerate(rbm.components_):
-            plt.subplot(10, 10, i + 1)
-
-            square_len = ceil(sqrt(comp.shape[0]))
-            plt.imshow(comp.reshape((square_len, square_len)), cmap=plt.cm.gray_r,
-                       interpolation='nearest')
-            plt.xticks(())
-            plt.yticks(())
-        plt.suptitle('100 components extracted by RBM', fontsize=16)
-        plt.subplots_adjust(0.08, 0.02, 0.92, 0.85, 0.08, 0.23)
-
-        plt.show()

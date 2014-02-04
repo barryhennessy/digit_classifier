@@ -1,5 +1,6 @@
 from csv import reader
 from pandas import SparseDataFrame
+from numpy import float32
 
 """Parses kaggle input training/test set data for further processing
 
@@ -45,6 +46,7 @@ class InputParser(object):
 
         @TODO: raise an exception if the pixels are not in the correct range
         """
+        raw_pixels = float32(raw_pixels)
         raw_pixels /= 255
         return raw_pixels
 
