@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import sys
+from data_vis.image_display import ImageDisplay
 from formatted_io import TrainingSetIO
 from memory_profiler import profile
 from classifier.rbm_classifier import RBMClassifier
@@ -19,15 +20,19 @@ def foo():
     )
 
     classifier = RBMClassifier()
-
     classifier.train(training_set_numbers, training_set_pixels)
+
+    test_set_predicted_numbers = classifier.predict(testing_set_pixels)
 
     print metrics.classification_report(
         testing_set_numbers,
-        classifier.predict(testing_set_pixels)
+        test_set_predicted_numbers
     )
 
-    classifier.plot_rbm_features()
+    image_plotter = ImageDisplay()
+    plot = image_plotter.plot_incorrect_classifications(test_set_predicted_numbers, testing_set_numbers, testing_set_pixels)
+    plot.show()
+    # classifier.plot_rbm_features()
 
 if __name__ == "__main__":
     foo()
