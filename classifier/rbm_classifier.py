@@ -1,16 +1,18 @@
 from sklearn import linear_model
 from sklearn.neural_network import BernoulliRBM
-from sklearn.grid_search import GridSearchCV
 from sklearn.pipeline import Pipeline
+from classifier import Classifier
 
 
-class RBMClassifier(object):
+class RBMClassifier(Classifier):
     """Classifies images as integer 0-9 and tests given input
     """
 
-    classifier = None
+    def _get_classification_pipeline(self):
+        """Builds and returns the classification Pipeline for this classifier
 
-    def train(self, target_numbers, pixels, parameter_space=None):
+        :return: A Pipeline with the required classification steps
+        """
         rbm = BernoulliRBM()
         rbm.n_components = 100
         rbm.learning_rate = 0.01
@@ -24,42 +26,4 @@ class RBMClassifier(object):
             ("logistic", logistic_regression)
         ]
 
-        pipeline = Pipeline(steps=classification_steps)
-
-        if parameter_space is not None:
-            self.classifier=self._train_with_grid_search(
-                pipeline,
-                parameter_space
-            )
-        else:
-            self.classifier=pipeline
-
-        self.classifier.fit(
-            pixels,
-            target_numbers
-        )
-
-    def _train_with_grid_search(self, pipeline, parameter_space):
-        # @TODO: test this
-        return GridSearchCV(
-            pipeline,
-            param_grid=parameter_space,
-            verbose=2,
-            n_jobs=3,
-            pre_dispatch="10*n_jobs"
-        )
-
-    def print_grid_search_details(self, parameter_space):
-        # @TODO: test this
-        print("Best score: %0.3f" % self.classifier.best_score_)
-        print("Best parameters set:")
-        best_parameters = self.classifier.best_estimator_.get_params()
-        for param_name in sorted(parameter_space.keys()):
-            print("\t%s: %r" % (param_name, best_parameters[param_name]))
-
-
-    def predict(self, unclassified_image_pixels):
-        if (self.classifier is None):
-            raise RuntimeError("classification must occur before prediction")
-
-        return self.classifier.predict(unclassified_image_pixels)
+        return Pipeline(steps=classification_steps)
