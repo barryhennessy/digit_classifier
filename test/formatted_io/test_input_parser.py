@@ -1,7 +1,7 @@
 import unittest
 import os
 from formatted_io import TestSetIO, TrainingSetIO
-from numpy import ndarray, nditer
+from numpy import ndarray, nditer, float32
 from csv import reader
 
 class TestRBMClassifier(unittest.TestCase):
@@ -73,6 +73,7 @@ class TestRBMClassifier(unittest.TestCase):
         for training_pixel in nditer(training_pixels):
             self.assertGreaterEqual(training_pixel, 0)
             self.assertLessEqual(training_pixel, 1)
+            self.assertIsInstance(training_pixel, float32)
 
     def test_training_data_numbers_correct_range(self):
         """Tests that the training data numbers are in the range 0-9
