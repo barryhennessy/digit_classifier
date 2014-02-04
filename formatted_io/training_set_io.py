@@ -1,4 +1,4 @@
-from numpy import uint8, float16, zeros
+from numpy import uint8, float32, zeros
 from formatted_io import InputParser
 
 """Parses kaggle input training and test set data for processing
@@ -26,7 +26,7 @@ class TrainingSetIO(InputParser):
 
         num_rows = self._parse_file_data_size(file_path)
 
-        pixels = zeros((num_rows, self.num_columns - 1), float16)
+        pixels = zeros((num_rows, self.num_columns - 1), float32)
         numbers = zeros((num_rows, ), uint8)
 
         row = 0

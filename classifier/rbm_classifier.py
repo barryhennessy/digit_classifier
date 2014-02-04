@@ -63,5 +63,3 @@ class RBMClassifier(object):
             raise RuntimeError("classification must occur before prediction")
 
         return self.classifier.predict(unclassified_image_pixels)
-
-
