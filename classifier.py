@@ -8,9 +8,11 @@ it's classification accuracy on part of it.
 Usage:
 classifier.py /path/to/training/set.csv
 
-Where the format of the training set csv file is defined by the class formatted_io.TrainingSetIO
+Where the format of the training set csv file is defined by the class
+formatted_io.TrainingSetIO
 
-Output displays classification accuracy per number and displays the misclassified images.
+Output displays classification accuracy per number and displays the
+misclassified images.
 Like so:
 
                  precision    recall  f1-score   support
@@ -42,9 +44,10 @@ from sklearn.cross_validation import train_test_split
 training_parser = TrainingSetIO()
 target_numbers, target_pixels = training_parser.parse(sys.argv[1])
 
-training_set_pixels, testing_set_pixels, training_set_numbers, testing_set_numbers = train_test_split(
-    target_pixels, target_numbers, test_size = 0.3
-)
+training_set_pixels, testing_set_pixels, training_set_numbers, \
+    testing_set_numbers = train_test_split(
+        target_pixels, target_numbers, test_size=0.3
+    )
 
 classifier = RBMClassifier()
 classifier.train(training_set_numbers, training_set_pixels)
@@ -64,4 +67,3 @@ plot = image_plotter.plot_incorrect_classifications(
     testing_set_pixels
 )
 plot.show()
-

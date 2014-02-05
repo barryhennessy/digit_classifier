@@ -1,14 +1,15 @@
 from csv import reader
-from pandas import SparseDataFrame
 from numpy import float32
 
-"""Parses kaggle input training/test set data for further processing
 
-See implementations for formats and implementation details
-
-@TODO: should probably be an abstract base class. Check out ABC module.
-"""
 class InputParser(object):
+    """Parses kaggle input training/test set data for further processing
+
+    See implementations for formats and implementation details
+
+    @TODO: should probably be an abstract base class. Check out ABC module.
+    """
+
     def parse(self, file_path):
         """Parses the test/training set and formats accordingly
         """
@@ -38,7 +39,6 @@ class InputParser(object):
                 size += 1
         return size
 
-
     def _process_raw_pixel_values(self, raw_pixels):
         """Applies pre processing to the pixel values
 
@@ -55,10 +55,8 @@ class InputParser(object):
         the concrete implementation of the input parser
         """
         len_headings = len(headings)
-        if (len_headings != self.num_columns):
+        if len_headings != self.num_columns:
             raise TypeError(
                 "Expected to have %d columns. %d encountered" %
                 (self.num_columns, len_headings)
             )
-
-

@@ -15,6 +15,8 @@ Where the label column is absent for testing, the format is otherwise identical
 
 Pixels can range from 0 -> 255
 """
+
+
 class TestSetIO(InputParser):
     num_columns = 784
 
@@ -57,5 +59,3 @@ class TestSetIO(InputParser):
         """
         headings = csv_reader.next()
         super(TestSetIO, self)._check_heading_length(headings)
-
-

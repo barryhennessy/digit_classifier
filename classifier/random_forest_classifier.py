@@ -6,7 +6,8 @@ __author__ = 'barryhennessy'
 
 
 class RandomForestClassifier(Classifier):
-    """Classifies images to images using a random forest classification approach
+    """Classifies images to images using a random forest classification
+    approach
     """
 
     default_max_depth = 20
@@ -14,7 +15,6 @@ class RandomForestClassifier(Classifier):
     default_min_samples_leaf = 1
     default_min_samples_split = 2
     default_n_estimators = 50
-
 
     def _get_classification_pipeline(self):
         """Builds and returns the classification Pipeline for this classifier

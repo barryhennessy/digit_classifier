@@ -2,13 +2,15 @@
 
 """Full classifier
 
-This script trains the classifier with the full training set and predicts values on the test set. The predicted values
-are written to the path given as the third argument
+This script trains the classifier with the full training set and predicts
+values on the test set. The predicted values are written to the path given as
+the third argument
 
 Usage:
-test_set_classifier.py /path/to/training/set.csv /path/to/test/set.csv /output/path.csv
+test_set_classifier.py /path/to/training.csv /path/to/test.csv /output/path.csv
 
-Formats of the training set, test set and output are as defined in TrainingSetIO and TestSetIO
+Formats of the training set, test set and output are as defined in
+TrainingSetIO and TestSetIO
 """
 
 import sys

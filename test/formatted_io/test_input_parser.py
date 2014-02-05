@@ -5,12 +5,11 @@ from numpy import ndarray, nditer, dtype
 from csv import reader
 
 class TestRBMClassifier(unittest.TestCase):
-
     # @TODO: assumes testing from root directory
-    MOCK_TRAINING_DATA_PATH="./test/formatted_io/mock_train_data.sm.csv"
-    MOCK_TESTING_DATA_PATH="./test/formatted_io/mock_test_data.sm.csv"
+    MOCK_TRAINING_DATA_PATH = "./test/formatted_io/mock_train_data.sm.csv"
+    MOCK_TESTING_DATA_PATH = "./test/formatted_io/mock_test_data.sm.csv"
 
-    MOCK_TESTING_WRITE_PATH="./test/formatted_io/mock_test_write.csv"
+    MOCK_TESTING_WRITE_PATH = "./test/formatted_io/mock_test_write.csv"
 
     def setUp(self):
         if os.path.exists(self.MOCK_TESTING_WRITE_PATH):
@@ -26,7 +25,7 @@ class TestRBMClassifier(unittest.TestCase):
         training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
-        
+
         self.assertEqual(len(training_numbers), len(training_pixels))
 
     def test_training_excepts_with_wrong_headings(self):
@@ -47,7 +46,7 @@ class TestRBMClassifier(unittest.TestCase):
         training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
-        
+
         self.assertIsInstance(training_pixels, ndarray)
 
 
@@ -58,7 +57,7 @@ class TestRBMClassifier(unittest.TestCase):
         training_numbers, training_pixels = input_parser.parse(
             self.MOCK_TRAINING_DATA_PATH
         )
-        
+
         self.assertIsInstance(training_numbers, ndarray)
 
     def test_training_data_pixel_normalising(self):
@@ -85,7 +84,7 @@ class TestRBMClassifier(unittest.TestCase):
         number_range = range(0, 10, 1)
         for training_number in nditer(training_numbers):
             self.assertIn(training_number, number_range)
-     
+
     def test_testing_excepts_with_wrong_headings(self):
         """Tests that the proper exception gets thrown if the wrong headings
         are encountered
@@ -95,7 +94,7 @@ class TestRBMClassifier(unittest.TestCase):
             training_numbers, training_pixels = input_parser.parse(
                 # Wrong path
                 self.MOCK_TRAINING_DATA_PATH
-            )   
+            )
 
     def test_testing_data_sparse_format(self):
         """Tests that the testing data is of the correct number array format

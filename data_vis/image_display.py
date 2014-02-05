@@ -9,7 +9,8 @@ class ImageDisplay(object):
     """Handles all plotting and visual analysis of test/train images
     """
 
-    def plot_incorrect_classifications(self, predicted_numbers, actual_numbers, images):
+    def plot_incorrect_classifications(self, predicted_numbers, actual_numbers,
+                                       images):
         """Plots misclassified numbers in order of value.
 
         Images will be plotted in order, i.e. all 1's first, 2's second, etc.
@@ -25,7 +26,6 @@ class ImageDisplay(object):
             if predicted_numbers[index] != actual_number:
                 numbers_to_plot[actual_number].append(images[index])
 
-
         # Sorting numbers so they're plotted in order
         plot_numbers = []
         for number in range(0, 10, 1):
@@ -33,7 +33,6 @@ class ImageDisplay(object):
         plot_images = asarray(plot_numbers, dtype="float32")
 
         return self.plot_images(plot_images, (10, 10))
-
 
     def plot_images(self, images, figure_size=(4.2, 4)):
         """Plots the images given on a square grid
@@ -55,7 +54,8 @@ class ImageDisplay(object):
             square_len = ceil(sqrt(len(pixels)))
             image_pixels = pixels.reshape((square_len, square_len))
 
-            plt.imshow(image_pixels, cmap=plt.cm.gray_r, interpolation='nearest')
+            plt.imshow(image_pixels, cmap=plt.cm.gray_r,
+                       interpolation='nearest')
 
             plt.xticks(())
             plt.yticks(())

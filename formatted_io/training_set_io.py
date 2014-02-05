@@ -1,21 +1,23 @@
 from numpy import uint8, float32, zeros
 from formatted_io import InputParser
 
-"""Parses kaggle input training and test set data for processing
 
-For training data input is expected in the form:
-
-label, pixel0, pixel1, ... pixelN
-1,22,33,...250
-9,53,0,...125
-...
-
-Where the label column is absent for testing, the format is otherwise identical
-
-Pixels can range from 0 -> 255
-Labels can range from 0 -> 9
-"""
 class TrainingSetIO(InputParser):
+    """Parses kaggle input training and test set data for processing
+
+    For training data input is expected in the form:
+
+    label, pixel0, pixel1, ... pixelN
+    1,22,33,...250
+    9,53,0,...125
+    ...
+
+    Where the label column is absent for testing, the format is otherwise
+    identical
+
+    Pixels can range from 0 -> 255
+    Labels can range from 0 -> 9
+    """
     num_columns = 785
 
     def parse(self, file_path):
@@ -52,6 +54,3 @@ class TrainingSetIO(InputParser):
             )
 
         super(TrainingSetIO, self)._check_heading_length(headings)
-
-
-
