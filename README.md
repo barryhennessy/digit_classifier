@@ -1,10 +1,10 @@
-digit_classifier
-================
-
+# Digit classification
 This project is built to test various methods of classifying digits from the MNIST digit classification challenge. It is set up so that various classifiers and/or pipelines of various classifiers can be run through the test and their performance compared.
 
 Some classifiers here have been submitted to the kaggle digit recogniser competition, scoring a respectable 96% classification accuracy. 
 
+
+### Usage & key points
 `classifier.py` can be used as a skeleton to predict the classification accuracy, time and memory performance of a classifier.
 
 Classifiers extend `classifier.classifier` and implement a single method to set up and return the classifier/pipeline.
