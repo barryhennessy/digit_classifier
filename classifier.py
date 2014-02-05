@@ -37,7 +37,7 @@ Like so:
 import sys
 from data_vis.image_display import ImageDisplay
 from formatted_io import TrainingSetIO
-from classifier.rbm_classifier import RBMClassifier
+from classifier.random_forest_classifier import RandomForestClassifier
 from sklearn import metrics
 from sklearn.cross_validation import train_test_split
 
@@ -49,7 +49,7 @@ training_set_pixels, testing_set_pixels, training_set_numbers, \
         target_pixels, target_numbers, test_size=0.3
     )
 
-classifier = RBMClassifier()
+classifier = RandomForestClassifier()
 classifier.train(training_set_numbers, training_set_pixels)
 
 test_set_predicted_numbers = classifier.predict(testing_set_pixels)
