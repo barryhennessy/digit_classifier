@@ -5,6 +5,7 @@ from formatted_io import TestSetIO, TrainingSetIO
 from numpy import ndarray, nditer, dtype
 from csv import reader
 
+
 class TestRBMClassifier(unittest.TestCase):
     # @TODO: assumes testing from root directory
     MOCK_TRAINING_DATA_PATH = "./test/formatted_io/mock_train_data.sm.csv"
@@ -49,7 +50,6 @@ class TestRBMClassifier(unittest.TestCase):
         )
 
         self.assertIsInstance(training_pixels, ndarray)
-
 
     def test_training_numbers_sparse_format(self):
         """Tests that the training data is of the correct number array format
@@ -103,7 +103,6 @@ class TestRBMClassifier(unittest.TestCase):
         input_parser = TestSetIO()
         testing_pixels = input_parser.parse(self.MOCK_TESTING_DATA_PATH)
         self.assertIsInstance(testing_pixels, ndarray)
-
 
     def test_testing_data_pixel_normalising(self):
         """Tests that the testing data pixels have been normalised to the range

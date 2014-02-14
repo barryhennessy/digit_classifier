@@ -2,28 +2,34 @@ from numpy import uint8, zeros
 from csv import DictWriter
 from formatted_io import InputParser
 
-"""Parses kaggle input test set data for processing
-
-For training data input is expected in the form:
-
-pixel0, pixel1, ... pixelN
-22,33,...250
-53,0,...125
-...
-
-Where the label column is absent for testing, the format is otherwise identical
-
-Pixels can range from 0 -> 255
-"""
-
 
 class TestSetIO(InputParser):
+    """Parses kaggle input test set data for processing and formats predictions
+    in the expected output format
+
+    For training data input is expected in the form:
+
+    pixel0, pixel1, ... pixelN
+    22,33,...250
+    53,0,...125
+    ...
+
+    Where the label column is absent for testing, the format is otherwise
+    identical
+
+    Pixels can range from 0 -> 255
+    """
+
     num_columns = 784
 
     def parse(self, file_path):
         """Parses the test set for pixel values
 
         Generates arrays of pixel values
+
+        :param file_path: The path to be read
+
+        :return: Numpy array of images (uint8 arrays)
         """
 
         num_rows = self._parse_file_data_size(file_path)
@@ -47,10 +53,12 @@ class TestSetIO(InputParser):
         """
         try:
             with open(path_or_file, "w") as output_file:
-                self._write_csv_formatted_predictions(output_file, predicted_values)
+                self._write_csv_formatted_predictions(output_file,
+                                                      predicted_values)
         except TypeError:
             if isinstance(path_or_file, file):
-                self._write_csv_formatted_predictions(path_or_file, predicted_values)
+                self._write_csv_formatted_predictions(path_or_file,
+                                                      predicted_values)
             else:
                 raise
 
@@ -75,6 +83,8 @@ class TestSetIO(InputParser):
     def _check_headings(self, csv_reader):
         """Consumes the first row of the csv_reader and ensures the headings
         are as required
+
+        :param csv_reader: The CSV reader whose headings are to be checked
         """
         headings = csv_reader.next()
         super(TestSetIO, self)._check_heading_length(headings)

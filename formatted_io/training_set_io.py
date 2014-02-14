@@ -18,12 +18,19 @@ class TrainingSetIO(InputParser):
     Pixels can range from 0 -> 255
     Labels can range from 0 -> 9
     """
+
     num_columns = 785
 
     def parse(self, file_path):
         """Parses the training set for labels (image numbers) and pixel values
 
         Generates tuples of integer labels and arrays of pixel values
+
+        :param file_path: The path to be parsed
+
+        :return: A tuple of (actual numbers, images). Where actual numbers is
+                 an array of the integer value of the associated image. Images
+                 is an array of an array of float32 pixels in the range 0. - 1.
         """
 
         num_rows = self._parse_file_data_size(file_path)
@@ -39,12 +46,16 @@ class TrainingSetIO(InputParser):
 
         pixels = super(TrainingSetIO, self)._process_raw_pixel_values(pixels)
 
-        # @TODO: Check performance of series. Here for consistency
         return (numbers, pixels)
 
     def _check_headings(self, csv_reader):
         """Consumes the first row of the csv_reader and ensures the headings
         are long enough and have the label field as the first position
+
+        :throws TypeError: If the file doesn't have the label header or it is
+                           not where expected
+
+        :param csv_reader: A CSV_reader whose headings are to be checked
         """
         headings = csv_reader.next()
 
