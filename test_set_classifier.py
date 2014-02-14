@@ -29,5 +29,4 @@ test_set = test_set_parser.parse(sys.argv[2])
 
 prediction = classifier.predict(test_set)
 
-# @TODO: Why on earth doesn't this write to stdout??
-test_set_parser.write(prediction, sys.argv[3])
+test_set_parser.write(prediction, sys.stdout)

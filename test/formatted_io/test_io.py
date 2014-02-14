@@ -1,3 +1,4 @@
+from sys import stdout
 import unittest
 import os
 from formatted_io import TestSetIO, TrainingSetIO
@@ -160,6 +161,37 @@ class TestRBMClassifier(unittest.TestCase):
                     predicted_value,
                     predicted_values[prediction_index]
                 )
+
+    def test_output_to_file_writes(self):
+        # Ensuring that no leaky tests leave files around that would cause this
+        # to break
+        self.assertEqual(os.path.exists(self.MOCK_TESTING_WRITE_PATH), False)
+
+        predicted_values = range(0, 10, 1)
+
+        with open(self.MOCK_TESTING_WRITE_PATH, "w") as output_file:
+            IO = TestSetIO()
+            IO.write(predicted_values, output_file)
+
+        self.assertEqual(os.path.exists(self.MOCK_TESTING_WRITE_PATH), True)
+
+        with open(self.MOCK_TESTING_WRITE_PATH, "rU") as sample:
+            csv_reader = reader(sample)
+
+            headings = csv_reader.next()
+            self.assertEqual(headings[0], "ImageId")
+            self.assertEqual(headings[1], "Label")
+
+            for written_line in csv_reader:
+                # output indices are indexed at 1
+                prediction_index = int(written_line[0]) - 1
+                predicted_value = int(written_line[1])
+
+                self.assertEqual(
+                    predicted_value,
+                    predicted_values[prediction_index]
+                )
+
 
 if __name__ == '__main__':
     unittest.main()

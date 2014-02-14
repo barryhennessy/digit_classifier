@@ -37,21 +37,40 @@ class TestSetIO(InputParser):
 
         return super(TestSetIO, self)._process_raw_pixel_values(pixels)
 
-    def write(self, predicted_values, path):
+    def write(self, predicted_values, path_or_file):
         """Writes the predicted values to the path specified
-        """
-        with open(path, "w") as output_file:
-            csv_output = DictWriter(output_file, {"ImageId", "Label"})
-            csv_output.writeheader()
 
-            line_count = 1
-            for value in predicted_values:
-                row = {
-                    "ImageId": line_count,
-                    "Label": int(value)
-                }
-                csv_output.writerow(row)
-                line_count += 1
+        :param predicted_values: A list of integer predictions, 0-9
+        :param path_or_file:     A path or file object to write the formatted
+                                 data to
+
+        """
+        try:
+            with open(path_or_file, "w") as output_file:
+                self._write_csv_formatted_predictions(output_file, predicted_values)
+        except TypeError:
+            if isinstance(path_or_file, file):
+                self._write_csv_formatted_predictions(path_or_file, predicted_values)
+            else:
+                raise
+
+    def _write_csv_formatted_predictions(self, output_file, predicted_values):
+        """Writes formatted data to the file specified
+
+        :param output_file:      The file object to write data to
+        :param predicted_values: A list of values to write. In the range 0-9
+        """
+        csv_output = DictWriter(output_file, {"ImageId", "Label"})
+        csv_output.writeheader()
+
+        line_count = 1
+        for value in predicted_values:
+            row = {
+                "ImageId": line_count,
+                "Label": int(value)
+            }
+            csv_output.writerow(row)
+            line_count += 1
 
     def _check_headings(self, csv_reader):
         """Consumes the first row of the csv_reader and ensures the headings
