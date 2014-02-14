@@ -34,36 +34,59 @@ Like so:
     Close to finish script.
 """
 
-import sys
+from argparse import ArgumentParser
 from data_vis.image_display import ImageDisplay
 from formatted_io import TrainingSetIO
 from classifier.random_forest_classifier import RandomForestClassifier
 from sklearn import metrics
 from sklearn.cross_validation import train_test_split
 
-training_parser = TrainingSetIO()
-target_numbers, target_pixels = training_parser.parse(sys.argv[1])
+if __name__ == "__main__":
+    arg_parser = ArgumentParser()
 
-training_set_pixels, testing_set_pixels, training_set_numbers, \
-    testing_set_numbers = train_test_split(
-        target_pixels, target_numbers, test_size=0.3
+    arg_parser.add_argument(
+        metavar='training/set/path',
+        dest="training_set",
+        help="the path to the training set"
     )
 
-classifier = RandomForestClassifier()
-classifier.train(training_set_numbers, training_set_pixels)
+    arg_parser.add_argument(
+        "--show-misclassified",
+        dest="show_misclassified",
+        help="display misclassified numbers",
+        action="store_true"
+    )
 
-test_set_predicted_numbers = classifier.predict(testing_set_pixels)
+    args = arg_parser.parse_args()
 
-print metrics.classification_report(
-    testing_set_numbers,
-    test_set_predicted_numbers
-)
+    training_parser = TrainingSetIO()
+    target_numbers, target_pixels = training_parser.parse(
+        args.training_set
+    )
 
-image_plotter = ImageDisplay()
-print("Displaying misclassified images...\nClose plot to finish script.")
-plot = image_plotter.plot_incorrect_classifications(
-    test_set_predicted_numbers,
-    testing_set_numbers,
-    testing_set_pixels
-)
-plot.show()
+    training_set_pixels, testing_set_pixels, training_set_numbers, \
+        testing_set_numbers = train_test_split(
+            target_pixels, target_numbers, test_size=0.3
+        )
+
+    classifier = RandomForestClassifier()
+    classifier.train(training_set_numbers, training_set_pixels)
+
+    test_set_predicted_numbers = classifier.predict(testing_set_pixels)
+
+    print metrics.classification_report(
+        testing_set_numbers,
+        test_set_predicted_numbers
+    )
+
+    if args.show_misclassified:
+        image_plotter = ImageDisplay()
+        print(
+            "Displaying misclassified images...\nClose plot to finish script."
+        )
+        plot = image_plotter.plot_incorrect_classifications(
+            test_set_predicted_numbers,
+            testing_set_numbers,
+            testing_set_pixels
+        )
+        plot.show()
