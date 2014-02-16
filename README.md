@@ -5,7 +5,8 @@ Some classifiers here have been submitted to the kaggle digit recogniser competi
 
 
 ### Usage & key points
-`classifier.py` can be used as a skeleton to predict the classification accuracy, time and memory performance of a classifier.
+`classifier.py` is used to predict the classification accuracy, time and memory performance of a classifier and to run
+classification against a test set. See `classifier.py -h` for full details.
 
 Classifiers extend `classifier.classifier` and implement a single method to set up and return the classifier/pipeline.
 
