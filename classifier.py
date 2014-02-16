@@ -7,6 +7,9 @@ predict it's classification accuracy on part of it. If a `test_set` is provided
 the entire training set is used to build the classifier and the digits are
 predicted for the entire test_set.
 
+Classifiers can be chosen with the --classifier parameter. For a list of
+available classifiers see the classifier package.
+
 Usage:
 
 To test classifiers against test sets of known numbers
@@ -23,8 +26,7 @@ Outputs predicted numbers, with an index to stdout.
 
 from argparse import ArgumentParser
 from sys import stdout
-
-from classifier.random_forest_classifier import RandomForestClassifier
+from classifier import get_classifier
 from sklearn import metrics
 from sklearn.cross_validation import train_test_split
 
@@ -53,6 +55,12 @@ if __name__ == "__main__":
         action="store_true"
     )
 
+    arg_parser.add_argument(
+        "--classifier",
+        help="the classifier to use",
+        default="RandomForestClassifier"
+    )
+
     args = arg_parser.parse_args()
 
     training_parser = TrainingSetIO()
@@ -72,7 +80,7 @@ if __name__ == "__main__":
                 training_set_pixels, training_set_numbers, test_size=0.3
             )
 
-    classifier = RandomForestClassifier()
+    classifier = get_classifier(args.classifier)
     classifier.train(training_set_numbers, training_set_pixels)
 
     test_set_predicted_numbers = classifier.predict(test_set_pixels)
