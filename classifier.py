@@ -1,45 +1,35 @@
 #! /usr/bin/env python
 
-"""Training classifier
+"""Digit classifier
 
-This script is used to train a classifier on the `training_set` and predict
-it's classification accuracy on part of it.
+This script is used to train a classifier on the `training_set` and optionally
+predict it's classification accuracy on part of it. If a `test_set` is provided
+the entire training set is used to build the classifier and the digits are
+predicted for the entire test_set.
 
 Usage:
-classifier.py /path/to/training/set.csv
 
-Where the format of the training set csv file is defined by the class
-formatted_io.TrainingSetIO
+To test classifiers against test sets of known numbers
+    classifier.py /path/to/training/set.csv
 
 Output displays classification accuracy per number and displays the
 misclassified images.
-Like so:
 
-                 precision    recall  f1-score   support
+To test classifiers against test sets of unknown numbers
+    classifier.py /path/to/training/set.csv --test-set-path="/path/to/test/set.csv"
 
-              0       0.91      0.93      0.92       150
-              1       0.97      0.97      0.97       158
-              2       0.89      0.89      0.89       144
-              3       0.84      0.87      0.85       166
-              4       0.85      0.88      0.87       138
-              5       0.88      0.81      0.84       132
-              6       0.93      0.92      0.92       155
-              7       0.88      0.90      0.89       170
-              8       0.80      0.81      0.80       135
-              9       0.80      0.76      0.78       152
-
-    avg / total       0.88      0.88      0.88      1500
-
-    Displaying misclassified images.
-    Close to finish script.
+Outputs predicted numbers, with an index to stdout.
 """
 
 from argparse import ArgumentParser
-from data_vis.image_display import ImageDisplay
-from formatted_io import TrainingSetIO
+from sys import stdout
+
 from classifier.random_forest_classifier import RandomForestClassifier
 from sklearn import metrics
 from sklearn.cross_validation import train_test_split
+
+from data_vis.image_display import ImageDisplay
+from formatted_io import TrainingSetIO, TestSetIO
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser()
@@ -48,6 +38,12 @@ if __name__ == "__main__":
         metavar='training/set/path',
         dest="training_set",
         help="the path to the training set"
+    )
+
+    arg_parser.add_argument(
+        "--test-set-path",
+        dest="test_set",
+        help="the path to the test set"
     )
 
     arg_parser.add_argument(
@@ -60,33 +56,44 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     training_parser = TrainingSetIO()
-    target_numbers, target_pixels = training_parser.parse(
+    training_set_numbers, training_set_pixels = training_parser.parse(
         args.training_set
     )
 
-    training_set_pixels, testing_set_pixels, training_set_numbers, \
-        testing_set_numbers = train_test_split(
-            target_pixels, target_numbers, test_size=0.3
-        )
+    if args.test_set:
+        training_set_numbers = training_set_numbers
+
+        test_set_parser = TestSetIO()
+        test_set_pixels = test_set_parser.parse(args.test_set)
+    else:
+        # Without a test set we need to split one out from the training set
+        training_set_pixels, test_set_pixels, training_set_numbers, \
+            test_set_numbers = train_test_split(
+                training_set_pixels, training_set_numbers, test_size=0.3
+            )
 
     classifier = RandomForestClassifier()
     classifier.train(training_set_numbers, training_set_pixels)
 
-    test_set_predicted_numbers = classifier.predict(testing_set_pixels)
+    test_set_predicted_numbers = classifier.predict(test_set_pixels)
 
-    print metrics.classification_report(
-        testing_set_numbers,
-        test_set_predicted_numbers
-    )
+    if args.test_set:
+        test_set_parser.write(test_set_predicted_numbers, stdout)
+    else:
+        print metrics.classification_report(
+            test_set_numbers,
+            test_set_predicted_numbers
+        )
 
-    if args.show_misclassified:
-        image_plotter = ImageDisplay()
-        print(
-            "Displaying misclassified images...\nClose plot to finish script."
-        )
-        plot = image_plotter.plot_incorrect_classifications(
-            test_set_predicted_numbers,
-            testing_set_numbers,
-            testing_set_pixels
-        )
-        plot.show()
+        if args.show_misclassified:
+            image_plotter = ImageDisplay()
+            print(
+                "Displaying misclassified images...\nClose plot to finish "
+                "script."
+            )
+            plot = image_plotter.plot_incorrect_classifications(
+                test_set_predicted_numbers,
+                test_set_numbers,
+                test_set_pixels
+            )
+            plot.show()
